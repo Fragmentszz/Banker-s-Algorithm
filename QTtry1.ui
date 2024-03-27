@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
-    <height>960</height>
+    <width>1448</width>
+    <height>979</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,12 +19,12 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1440</width>
-      <height>960</height>
+      <width>1920</width>
+      <height>1440</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="MaxAndNeed">
      <attribute name="title">
@@ -64,6 +64,24 @@
       </property>
       <property name="text">
        <string>最大资源:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>830</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>剩余服务时间:</string>
       </property>
      </widget>
     </widget>
@@ -161,7 +179,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1440</width>
+     <width>1448</width>
      <height>22</height>
     </rect>
    </property>
@@ -193,6 +211,7 @@
     <addaction name="createRProcess"/>
     <addaction name="createBProcess"/>
     <addaction name="fillAll1"/>
+    <addaction name="createTime"/>
    </widget>
    <widget class="QMenu" name="Now">
     <property name="title">
@@ -208,12 +227,19 @@
     <addaction name="createAllocation"/>
     <addaction name="createRequest"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="help"/>
+   </widget>
    <addaction name="start"/>
    <addaction name="Project"/>
-   <addaction name="Run"/>
    <addaction name="Process"/>
    <addaction name="Now"/>
    <addaction name="menu_Allocation"/>
+   <addaction name="Run"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -331,6 +357,16 @@
   <action name="createRequest">
    <property name="text">
     <string>随机生成请求向量</string>
+   </property>
+  </action>
+  <action name="createTime">
+   <property name="text">
+    <string>随机生成剩余服务时间</string>
+   </property>
+  </action>
+  <action name="help">
+   <property name="text">
+    <string>帮助</string>
    </property>
   </action>
  </widget>

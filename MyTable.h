@@ -41,3 +41,12 @@ protected slots:
     void createAllocation();
     void createRequst();
 };
+
+class TimeTable :
+    public MyTable
+{
+public:
+    TimeTable(QWidget* parent = nullptr);
+    void initTable(pair<int, int> size);
+    void addColumn();
+};

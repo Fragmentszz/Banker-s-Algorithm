@@ -10,10 +10,10 @@ BAWindow::BAWindow(QWidget* parent):QWidget(parent)
 	tb->setText("empty!");
 	tb->setGeometry(0, 0, 10, 10);
 	ui.webEngineView->load(QUrl("qrc:/new/html/graph.html"));
-	//ui.webEngineView->load(QUrl("https://www.baidu.com"));
 	ui.webEngineView->show();
 }
-QString generateJs(int flag, vector<vector<int>> path)
+
+QString generateJs(int flag, vector<vector<int>> path, vector<int>& scores)
 {
 	QString jscode = "runBA(";
 	jscode.append((char)(flag + '0'));
@@ -29,10 +29,17 @@ QString generateJs(int flag, vector<vector<int>> path)
 		jscode.append(']');
 		if (i != path.size() - 1)  jscode.append(',');
 	}
+	jscode.append("],[");
+	for (int i = 0; i < scores.size(); i++)
+	{
+		jscode.append(std::to_string(scores[i] * 1.0 / path[0].size()));
+		if (i != scores.size() - 1)	jscode.append(",");
+	}
 	jscode.append(']');
 	jscode.append(");");
 	return jscode;
 }
+
 
 
 typedef vector<int> VI;
@@ -69,6 +76,7 @@ vector<int> dflag;
 vector<vector<int>> dallocation;
 vector<vector<int>> dpaths;
 vector<int> dpath;
+vector<int> dTimes;
 void bankAlgorithm(int now)							//内部使用
 {
 	int n = dneed.size(), m = dwork.size();
@@ -88,24 +96,39 @@ void bankAlgorithm(int now)							//内部使用
 		}
 	}
 }
+long long cacutime(const vector<int>& path)
+{
+	int nowtime1 = 0;
+	long long waittime1 = 0;
+	for (int i = 0; i < path.size(); i++)
+	{
+		waittime1 += nowtime1;
+		nowtime1 += dTimes[path[i]-1];
+	}
+	return waittime1;
+}
+static bool cmp(const vector<int>& path1, const vector<int>& path2)
+{
+	return cacutime(path1) < cacutime(path2);
+}
 
-
-void BAWindow::BankAlgorithm(vector<vector<int>>& Need, vector<vector<int>>& allocation, vector<int>& nowR, int needid, vector<int>& apply)
+void BAWindow::BankAlgorithm(vector<vector<int>>& Need, vector<vector<int>>& allocation, vector<int>& nowR, int needid, vector<int>& apply,vector<int>& Times)
 {
 	QString jscode;
 	dpaths.clear();
+	dTimes = Times;
+	vector<int> scores;
 	int n = Need.size(),m = apply.size();
 	for (int j = 0; j < m; j++)
 	{
 		if (apply[j] + allocation[needid][j] > Need[needid][j])
 		{
-			jscode = generateJs(1, dpaths);
+			jscode = generateJs(1, dpaths, scores);
 		}
 		else if (apply[j] > nowR[j]) {
-			jscode = generateJs(2, dpaths);
+			jscode = generateJs(2, dpaths,scores);
 		}
 	}
-	//vector<vector<int>> hneed;
 	dneed.resize(n);
 	for (int i = 0; i < n; i++)
 	{
@@ -127,10 +150,18 @@ void BAWindow::BankAlgorithm(vector<vector<int>>& Need, vector<vector<int>>& all
 	dpath.resize(n);
 	bankAlgorithm(0);
 	if (dpaths.empty()) {
-		jscode = generateJs(3, dpaths);
+		jscode = generateJs(3, dpaths,scores);
 	}
 	else {
-		jscode = generateJs(4, dpaths);
+
+		dpaths.resize(min(10, (int)dpaths.size()));
+		sort(dpaths.begin(), dpaths.end(), cmp);
+		
+		for (int i = 0; i < dpaths.size(); i++)
+		{
+			scores.push_back(cacutime(dpaths[i]));
+		}
+		jscode = generateJs(4, dpaths,scores);
 	}
 	ui.webEngineView->page()->runJavaScript(jscode);
 	cout << jscode.toStdString() << endl;

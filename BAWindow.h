@@ -8,7 +8,7 @@ class BAWindow:
 {
 public:
 	BAWindow(QWidget* parent = nullptr);
-	void BankAlgorithm(vector<vector<int>>& Need, vector<vector<int>>& allocation, vector<int>& nowR,int needid, vector<int>& apply);
+	void BankAlgorithm(vector<vector<int>>& Need, vector<vector<int>>& allocation, vector<int>& nowR,int needid, vector<int>& apply,vector<int>& Times);
 
 	QTextBrowser* tb;
 	Ui::Form ui;

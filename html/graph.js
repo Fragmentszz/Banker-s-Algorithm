@@ -61,7 +61,7 @@ var linestyle = {
     curveness: 0
 };
 
-function runBA(flag,datas)
+function runBA(flag,datas,scores)
 {
     clearDivs();
     const n = datas.length;
@@ -73,7 +73,7 @@ function runBA(flag,datas)
     }else if(flag === 3){
         option0.graphic.elements[0].style.text = '不响应请求!\n响应请求后进入死锁状态！';
     }else{
-        option0.graphic.elements[0].style.text = '可以响应请求!\n给出可用分配路径:';
+        option0.graphic.elements[0].style.text = '可以响应请求!\n给出按照平均等待时长排序的可用分配路径:';
     }
     const div0 = document.getElementById('div_0');
     
@@ -126,7 +126,7 @@ function runBA(flag,datas)
         }
         var option = {
             title: {
-              text: '第' + (i+1) + '条路径'
+              text: '第' + (i+1) + '条路径---平均等待时长:' + scores[i]
             },
             tooltip: {},
             animationDurationUpdate: 1500,

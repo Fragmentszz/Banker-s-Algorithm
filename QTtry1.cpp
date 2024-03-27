@@ -1,6 +1,7 @@
 ﻿
 #include "QTtry1.h"
 #include"_basic.h"
+#include <QtWebEngineWidgets/QWebEngineView>
 
 QTtry1::QTtry1(QWidget *parent)
     : QMainWindow(parent)
@@ -8,21 +9,25 @@ QTtry1::QTtry1(QWidget *parent)
     ui.setupUi(this);
     t_now = new MyTable(this->ui.MaxAndNeed);
     t_process = new MyTable(this->ui.MaxAndNeed);
-
+    time_process = new TimeTable(this->ui.MaxAndNeed);
     
     t_nowR = new MyTable(this->ui.Allocation);
     t_apply = new MyTable(this->ui.Allocation);
     t_allocation = new AllocationTable(this->ui.Allocation, t_nowR, t_apply);
 
+    
+    int width = 1920;
 
-    t_process->setGeometry(0, 30, 1440, 700);
-    t_now->setGeometry(0, 760, 1440, 70);
+    t_process->setGeometry(0, 30, width, 700);
+    t_now->setGeometry(0, 760, width, 70);
+    time_process->setGeometry(0, 860, width, 70);
 
-    t_allocation->setGeometry(0, 30, 1440, 600);
-    t_nowR->setGeometry(0, 650, 1440, 70);
+
+    t_allocation->setGeometry(0, 30, width, 600);
+    t_nowR->setGeometry(0, 650, width, 70);
     t_nowR->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    t_apply->setGeometry(0, 740, 1440, 70);
+    t_apply->setGeometry(0, 740, width, 70);
 
     connect(ui.newProject, &QAction::triggered, this, &QTtry1::newProject);
 
@@ -31,10 +36,16 @@ QTtry1::QTtry1(QWidget *parent)
 
     connect(ui.run, &QAction::triggered, this, &QTtry1::runBA);                                     //运行银行家算法
 
+
+    connect(ui.fromExcel, &QAction::triggered, this, &QTtry1::fromExcel);                           //从excel导入
+
     connect(ui.fillAll1, &QAction::triggered, t_process, &MyTable::fillAll);                        //随机生成所有
     connect(ui.fillAllBlank1, &QAction::triggered, t_process, &MyTable::fillAllBlank);              //随机填充空白
     connect(ui.createBProcess, &QAction::triggered, t_process, &MyTable::addRow);                   //添加空白进程
     connect(ui.createRProcess, &QAction::triggered, t_process, &MyTable::addRow_r);                 //添加空白进程
+    connect(ui.createBProcess, &QAction::triggered, time_process, &TimeTable::addColumn);           //添加空白进程
+    connect(ui.createRProcess, &QAction::triggered, time_process, &TimeTable::addColumn);           //添加空白进程
+    connect(ui.createTime, &QAction::triggered, time_process, &TimeTable::fillAll);
     connect(ui.newResource, &QAction::triggered, t_process, &MyTable::addColumn);                   //添加资源
 
     connect(ui.fillAll2, &QAction::triggered, t_now, &MyTable::fillAll);                            //随机生成所有现有资源
@@ -49,9 +60,21 @@ QTtry1::QTtry1(QWidget *parent)
 
     connect(ui.createRequest, &QAction::triggered, t_allocation, &AllocationTable::createRequst);                                  //创建请求向量
 
+
+    connect(ui.help, &QAction::triggered, this, &QTtry1::Help);                                         //帮助
+
     baw = new BAWindow();
     baw->hide();
     this->ui.tabWidget->setCurrentIndex(0);
+
+    helpw = new QWidget();
+    helpw->hide();
+    
+    QWebEngineView* helpPage = new QWebEngineView(helpw);
+    helpw->setGeometry(100, 100, 1080, 720);
+    helpPage->setGeometry(0, 0, 1080, 720);
+    helpPage->load(QString("qrc:/new/html/help.html"));
+
 }
 
 void QTtry1::allocationChange(QTableWidgetItem* item)
@@ -80,6 +103,9 @@ void QTtry1::initTable(pair<int,int> result)
     t_now->initTable({1, result.second });
 
     t_now->verticalHeader()->setVisible(false);
+
+    time_process->initTable({ 1,result.first });
+    time_process->verticalHeader()->setVisible(false);
 }
 
 void QTtry1::runBA()
@@ -100,10 +126,10 @@ void QTtry1::runBA()
     {
         auto critical = QMessageBox::critical(this, "拒绝运行！", "申请资源的进程号不对！！！");
     }
-    else 
+    else
     {
         baw->show();
-        baw->BankAlgorithm(t_process->tb, t_allocation->tb, (t_nowR->tb)[0], ui.needid->value() - 1, (t_apply->tb)[0]);
+        baw->BankAlgorithm(t_process->tb, t_allocation->tb, (t_nowR->tb)[0], ui.needid->value() - 1, (t_apply->tb)[0],(time_process->tb)[0]);
     }
     
 }
@@ -155,7 +181,51 @@ void QTtry1::tabChange()
 
 }
 
+void QTtry1::fromExcel()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+        "选择excel文件",
+        "./",
+        "excel files(*.xlsx *.xls)");
 
+    wchar_t str[1000] = { 0 };
+    using namespace libxl;
+    Book* book = xlCreateXMLBookW();
+    book->setKey(libxl_cracked_name, libxl_cracked_key);
+    int len = filename.toWCharArray(str);
+    if (book)
+    {
+        book->load(str);
+        if (book)
+        {
+            Sheet* sheet = book->getSheet(0);
+            const wchar_t* ss = book->getSheetName(0);
+            if (sheet)
+            {
+                int n = sheet->lastRow(), m = sheet->lastCol();
+                initTable({ n-1,m-1 });
+                for (int i = sheet->firstRow()+1; i < n; i++)
+                {
+                    for (int j = sheet->firstCol()+1; j < m; j++)
+                    {
+                        t_process->setItem(i-1, j-1, new QTableWidgetItem(N2S(sheet->readNum(i, j))));
+                    }
+                }
+            }
+            else {
+                cout << "没打开sheet" << endl;
+            }
+            book->release();
+        }
+        else {
+            cout << "没打开啊" << endl;
+        }
+    }
+}
+void QTtry1::Help()
+{
+    helpw->show();
+}
 QTtry1::~QTtry1()
 {
     

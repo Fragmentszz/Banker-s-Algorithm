@@ -7,6 +7,7 @@ MyTable::MyTable(QWidget* parent)
 {
     connect(this, &QTableWidget::itemChanged, this, &MyTable::bindtb);
 }
+
 void MyTable::fillAllBlank()         //填充全部空白
 {
     for (int i = 0; i < this->rowCount(); i++)
@@ -74,8 +75,9 @@ void MyTable::addRow()
 {
     int nowrow = this->rowCount();
     tb.resize(++nowrow);
+    cout << nowrow << " " << tb.size() << endl;
     tb[nowrow - 1].resize(this->columnCount());
-    for (int j = 0; j < this->colorCount(); j++)
+    for (int j = 0; j < this->columnCount(); j++)
     {
         tb[nowrow - 1][j] = 0;
     }
@@ -112,6 +114,7 @@ void MyTable::addColumn()
     auto tmpItem = new QTableWidgetItem(s);
     this->setHorizontalHeaderItem(nowcolumn - 1, tmpItem);
 }
+
 bool MyTable::hasEmpty()    const
 {
     for (int i = 0; i < this->rowCount(); i++)
@@ -170,7 +173,7 @@ void AllocationTable::bindtb(QTableWidgetItem* item)
 {
     int i = item->row(), j = item->column();
     int after = S2N(item->text());
-    if (after > Need[i][j])
+    if (after > Need[i][j])                     //分配的数量大于最大需求量
     {
         item->setText(N2S(tb[i][j]));
         stringstream ss;
@@ -179,7 +182,7 @@ void AllocationTable::bindtb(QTableWidgetItem* item)
         getline(ss, s);
         auto critical = QMessageBox::critical(this, "分配有误!!", QString::fromStdString(s));
     }
-    else if(after - tb[i][j] > nowR[j])
+    else if(after - tb[i][j] > nowR[j])        //分配的数量超过当前剩余的资源数量
     {
         item->setText(N2S(tb[i][j]));
         stringstream ss;
@@ -194,7 +197,7 @@ void AllocationTable::bindtb(QTableWidgetItem* item)
         tb[i][j] = after;
     }
 
-
+    // 更改剩余资源t_nowR
     if (t_nowR->item(0, j) == nullptr)
     {
         t_nowR->setItem(0, j, new QTableWidgetItem(N2S(nowR[j])));
@@ -244,4 +247,53 @@ void AllocationTable::createRequst()
         int rd = randint(0, nowR[i]);
         t_apply->setItem(0, i, new QTableWidgetItem(N2S(rd)));
     }
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+TimeTable::TimeTable(QWidget* parent):MyTable(parent)
+{
+
+}
+
+void TimeTable::initTable(pair<int, int> result)
+{
+    this->clearContents();
+    tb.resize(result.first);
+    for (int i = 0; i < result.first; i++) {
+        tb[i].resize(result.second);
+        for (int j = 0; j < result.second; j++) {
+            tb[i][j] = 0;
+        }
+    }
+    this->setRowCount(result.first);
+    this->setColumnCount(result.second);
+    QStringList header_column;
+    for (int i = 0; i < result.second; i++) {
+        QString s = "进程";
+        s.append(N2S(i + 1));
+        header_column << s;
+    }
+
+    this->setHorizontalHeaderLabels(header_column);
+}
+
+void TimeTable::addColumn()
+{
+    //cout << "here" << endl;
+    int nowcolumn = this->columnCount();
+    nowcolumn++;
+    //cout << nowcolumn << endl;
+    for (int i = 0; i < tb.size(); i++) {
+        tb[i].resize(nowcolumn);
+        tb[i][nowcolumn - 1] = 0;
+    }
+    QString s = "进程";
+    s.append(N2S(nowcolumn));
+    this->setColumnCount(nowcolumn);
+    auto tmpItem = new QTableWidgetItem(s);
+    this->setHorizontalHeaderItem(nowcolumn - 1, tmpItem);
 }
