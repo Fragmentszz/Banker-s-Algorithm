@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QTtry1Class</class>
+ <widget class="QMainWindow" name="QTtry1Class">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1448</width>
+    <height>979</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QTtry1</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1920</width>
+      <height>1440</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="MaxAndNeed">
+     <attribute name="title">
+      <string>Need</string>
+     </attribute>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>最大需求资源：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>730</y>
+        <width>90</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>最大资源:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>830</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>剩余服务时间:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Allocation">
+     <attribute name="title">
+      <string>Allocation</string>
+     </attribute>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>已分配资源:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>630</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>现有资源:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>720</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请求资源:</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="needid">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>720</y>
+        <width>42</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>720</y>
+        <width>31</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>进程</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1448</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="start">
+    <property name="title">
+     <string>开始</string>
+    </property>
+    <addaction name="newProject"/>
+    <addaction name="fromExcel"/>
+   </widget>
+   <widget class="QMenu" name="Project">
+    <property name="title">
+     <string>项目</string>
+    </property>
+    <addaction name="newResource"/>
+    <addaction name="fillAll"/>
+   </widget>
+   <widget class="QMenu" name="Run">
+    <property name="title">
+     <string>运行</string>
+    </property>
+    <addaction name="run"/>
+   </widget>
+   <widget class="QMenu" name="Process">
+    <property name="title">
+     <string>进程管理</string>
+    </property>
+    <addaction name="fillAllBlank1"/>
+    <addaction name="createRProcess"/>
+    <addaction name="createBProcess"/>
+    <addaction name="fillAll1"/>
+    <addaction name="createTime"/>
+   </widget>
+   <widget class="QMenu" name="Now">
+    <property name="title">
+     <string>最大资源管理</string>
+    </property>
+    <addaction name="fillAllBlank2"/>
+    <addaction name="fillAll2"/>
+   </widget>
+   <widget class="QMenu" name="menu_Allocation">
+    <property name="title">
+     <string>分配与请求</string>
+    </property>
+    <addaction name="createAllocation"/>
+    <addaction name="createRequest"/>
+    <addaction name="AllocationFromExcel"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="help"/>
+   </widget>
+   <addaction name="start"/>
+   <addaction name="Project"/>
+   <addaction name="Process"/>
+   <addaction name="Now"/>
+   <addaction name="menu_Allocation"/>
+   <addaction name="Run"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="newProject">
+   <property name="text">
+    <string>新建项目</string>
+   </property>
+  </action>
+  <action name="fillAllBlank">
+   <property name="text">
+    <string>随机填充空白数据</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>新建进程</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>新建资源列</string>
+   </property>
+  </action>
+  <action name="newProcess">
+   <property name="text">
+    <string>随机生成新进程</string>
+   </property>
+  </action>
+  <action name="blankProcess">
+   <property name="text">
+    <string>创建空白进程</string>
+   </property>
+  </action>
+  <action name="newResource">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>加入新资源</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="fromExcel">
+   <property name="text">
+    <string>从excel导入</string>
+   </property>
+  </action>
+  <action name="fillAll">
+   <property name="text">
+    <string>随机生成初始数据</string>
+   </property>
+  </action>
+  <action name="run">
+   <property name="text">
+    <string>执行银行家算法</string>
+   </property>
+  </action>
+  <action name="fillNow">
+   <property name="text">
+    <string>随机生成当前资源</string>
+   </property>
+  </action>
+  <action name="fillAllBlank1">
+   <property name="text">
+    <string>随机填充空白数据</string>
+   </property>
+  </action>
+  <action name="createRProcess">
+   <property name="text">
+    <string>随机生成新进程</string>
+   </property>
+  </action>
+  <action name="createBProcess">
+   <property name="text">
+    <string>创建空白进程</string>
+   </property>
+  </action>
+  <action name="fillAllBlank2">
+   <property name="text">
+    <string>随机填充空白数据</string>
+   </property>
+  </action>
+  <action name="fillAll2">
+   <property name="text">
+    <string>随机生成初始数据</string>
+   </property>
+  </action>
+  <action name="fillAll1">
+   <property name="text">
+    <string>随机生成初始数据</string>
+   </property>
+  </action>
+  <action name="createAllocation">
+   <property name="text">
+    <string>随机生成分配方案</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>随机生成请求向量</string>
+   </property>
+  </action>
+  <action name="createRequest">
+   <property name="text">
+    <string>随机生成请求向量</string>
+   </property>
+  </action>
+  <action name="createTime">
+   <property name="text">
+    <string>随机生成剩余服务时间</string>
+   </property>
+  </action>
+  <action name="help">
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
+  <action name="AllocationFromExcel">
+   <property name="text">
+    <string>导入分配方案</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="QTtry1.qrc"/>
+ </resources>
+ <connections/>
+</ui>
