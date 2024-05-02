@@ -20,9 +20,15 @@ QString N2S(int num)
 
 int S2N(QString s)                                          //×¢Òâ¼ì´í
 {
-    int res = 0;
+    long long res = 0;
     for (int i = 0; i < s.length(); i++) {
+        if (s[i].toLatin1() > '9' || s[i].toLatin1() < '0') {
+            return -1;
+        }
         res = res * 10 + ((s[i].toLatin1()) - '0');
+    }
+    if (res > ((1LL << 31) - 1) || s.length() > 10) {
+        return -2;
     }
     return res;
 }

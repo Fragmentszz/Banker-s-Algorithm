@@ -1,5 +1,6 @@
 #pragma once
 #include"_basic.h"
+#include <QtWidgets/QMainWindow>
 class QTtry1;
 class MyTable :
 	public QTableWidget

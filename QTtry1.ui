@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="MaxAndNeed">
      <attribute name="title">
@@ -226,6 +226,7 @@
     </property>
     <addaction name="createAllocation"/>
     <addaction name="createRequest"/>
+    <addaction name="AllocationFromExcel"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -367,6 +368,11 @@
   <action name="help">
    <property name="text">
     <string>帮助</string>
+   </property>
+  </action>
+  <action name="AllocationFromExcel">
+   <property name="text">
+    <string>导入分配方案</string>
    </property>
   </action>
  </widget>

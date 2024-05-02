@@ -35,12 +35,32 @@ PopupDialog::PopupDialog(QWidget* parent) : QDialog(parent),rowcount(0),columnco
     connect(okButton, &QPushButton::clicked, [this, inputLineEdit_row, inputLineEdit_column]() {
         QString inputText_row = inputLineEdit_row->text();
         QString inputText_column = inputLineEdit_column->text();
+        rowcount = S2N(inputText_row);
+        columncount = S2N(inputText_column);
         // 根据输入框的内容和选项来修改变量a的值
         // 这里只是一个简单示例，可以根据业务逻辑进行具体实现
-            if (1){                                                             //判断纯数字
-                rowcount = inputText_row.toInt();
-                columncount = inputText_column.toInt();
-                // 关闭弹窗
+            if(rowcount == -1 || columncount == -1){
+                stringstream ss;
+                ss << "进程数和资源数都必须是一个自然数!!!!" << endl;
+                string s;
+                getline(ss, s);
+                auto critical = QMessageBox::critical(this, "填写错误!!", QString::fromStdString(s));
+            }
+            else if(rowcount == -2 || rowcount >= 10000)
+            {
+                stringstream ss;
+                ss << "进程数输入的数字太大了！！" << endl << "请输入一个范围在[0,10000]的整数!" << endl;
+                string s = stringFromSS(ss);
+                auto critical = QMessageBox::critical(this, "填写错误!!", QString::fromStdString(s));
+            }
+            else if (columncount == -2 || columncount >= 5000)
+            {
+                stringstream ss;
+                ss << "资源数输入的数字太大了！！" << endl << "请输入一个范围在[0,5000]的整数!" << endl;
+                string s = stringFromSS(ss);
+                auto critical = QMessageBox::critical(this, "填写错误!!", QString::fromStdString(s));
+            }
+            else {
                 accept();
             }
         });

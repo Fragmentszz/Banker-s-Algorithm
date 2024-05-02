@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtWidgets>
-
+#include"_basic.h"
 class PopupDialog : public QDialog {
 public:
     PopupDialog(QWidget* parent = nullptr);

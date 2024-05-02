@@ -39,6 +39,8 @@ QTtry1::QTtry1(QWidget *parent)
 
     connect(ui.fromExcel, &QAction::triggered, this, &QTtry1::fromExcel);                           //从excel导入
 
+    connect(ui.AllocationFromExcel, &QAction::triggered, this, &QTtry1::AllocationfromExcel);
+
     connect(ui.fillAll1, &QAction::triggered, t_process, &MyTable::fillAll);                        //随机生成所有
     connect(ui.fillAllBlank1, &QAction::triggered, t_process, &MyTable::fillAllBlank);              //随机填充空白
     connect(ui.createBProcess, &QAction::triggered, t_process, &MyTable::addRow);                   //添加空白进程
@@ -91,6 +93,11 @@ void QTtry1::newProject()           //新项目
         // 获取弹窗中的变量a的值
         auto result = pw.getResult();
         initTable(result);
+        stringstream ss;
+        ss << "生成了一个" << result.first << "个进程, " << result.second << "种资源的空项目！！" << endl;
+        QMessageBox message(QMessageBox::Information, QString("项目创建成功"), QString::fromStdString(stringFromSS(ss)),QMessageBox::Yes);
+        message.button(QMessageBox::Yes)->setText("好耶!!");
+        int Ret = message.exec();
     }
 }
 
@@ -114,15 +121,15 @@ void QTtry1::runBA()
     {
         auto critical = QMessageBox::critical(this, "拒绝运行！", "请将页面切换到Allocation页面，并且确认资源的分配！");
     }
-    else if (t_allocation->hasEmpty())
+    else if (t_allocation->hasEmpty())                  //进程的当前分配值有空值
     {
         auto critical = QMessageBox::critical(this, "拒绝运行！", "进程的当前分配值有空值！！");
     }
-    else if(t_apply->hasEmpty())
+    else if(t_apply->hasEmpty())                        //申请的资源向量有空值
     {
         auto critical = QMessageBox::critical(this, "拒绝运行！", "申请的资源向量有空值！！");
     }
-    else if (ui.needid->value() < 1 || ui.needid->value() > t_process->rowCount())
+    else if (ui.needid->value() < 1 || ui.needid->value() > t_process->rowCount())      //申请资源的进程号不对
     {
         auto critical = QMessageBox::critical(this, "拒绝运行！", "申请资源的进程号不对！！！");
     }
@@ -181,6 +188,55 @@ void QTtry1::tabChange()
 
 }
 
+
+void QTtry1::AllocationfromExcel()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+        "选择excel文件",
+        "./",
+        "excel files(*.xlsx *.xls)");
+
+    wchar_t str[1000] = { 0 };
+    using namespace libxl;
+    Book* book = xlCreateXMLBookW();
+    book->setKey(libxl_cracked_name, libxl_cracked_key);
+    int len = filename.toWCharArray(str);
+    if (book)
+    {
+        book->load(str);
+        if (book)
+        {
+            Sheet* sheet = book->getSheet(0);
+            const wchar_t* ss = book->getSheetName(0);
+            if (sheet)
+            {
+                int n = sheet->lastRow(), m = sheet->lastCol();
+                //initTable({ n - 1,m - 1 });
+                for (int i = sheet->firstRow() + 1; i < n; i++)
+                {
+                    for (int j = sheet->firstCol() + 1; j < m; j++)
+                    {
+                        t_allocation->setItem(i - 1, j - 1, new QTableWidgetItem(N2S(sheet->readNum(i, j))));
+                    }
+                }
+                stringstream ss;
+                ss << "成功导入了一种分配方案" << endl;
+                QMessageBox message(QMessageBox::Information, QString("分配方案导入成功"), QString::fromStdString(stringFromSS(ss)), QMessageBox::Yes);
+                message.button(QMessageBox::Yes)->setText("好耶!!");
+                int Ret = message.exec();
+            }
+            else {
+                cout << "没打开sheet" << endl;
+            }
+            book->release();
+        }
+        else {
+            cout << "没打开啊" << endl;
+        }
+    }
+}
+
+
 void QTtry1::fromExcel()
 {
     QString filename = QFileDialog::getOpenFileName(this,
@@ -211,6 +267,11 @@ void QTtry1::fromExcel()
                         t_process->setItem(i-1, j-1, new QTableWidgetItem(N2S(sheet->readNum(i, j))));
                     }
                 }
+                stringstream ss;
+                ss << "导入了一个" << n-1 << "个进程, " << m-1 << "中资源的项目！！" << endl;
+                QMessageBox message(QMessageBox::Information, QString("项目导入成功"), QString::fromStdString(stringFromSS(ss)), QMessageBox::Yes);
+                message.button(QMessageBox::Yes)->setText("好耶!!");
+                int Ret = message.exec();
             }
             else {
                 cout << "没打开sheet" << endl;
@@ -221,6 +282,7 @@ void QTtry1::fromExcel()
             cout << "没打开啊" << endl;
         }
     }
+
 }
 void QTtry1::Help()
 {

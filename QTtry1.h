@@ -34,6 +34,7 @@ private slots:
     void allocationChange(QTableWidgetItem* item);
     void Help();
     void fromExcel();
+    void AllocationfromExcel();
     //void fillAllBlank();
     //void fillAll();
     //void bindtb(QTableWidgetItem* item);
